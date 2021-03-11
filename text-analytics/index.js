@@ -156,34 +156,3 @@ async function keyPhraseExtraction(client){
     });
 }
 keyPhraseExtraction(textAnalyticsClient);
-
-const documents = [
-    "Microsoft was founded by Bill Gates and Paul Allen.",
-  ];
-  
-  async function analyze_example(client) {
-    console.log("== Analyze Sample ==");
-  
-    const tasks = {
-      entityRecognitionTasks: [{ modelVersion: "latest" }]
-    };
-    const poller = await client.beginAnalyze(documents, tasks);
-    const resultPages = await poller.pollUntilDone();
-  
-    for await (const page of resultPages) {
-      const entitiesResults = page.entitiesRecognitionResults![0];
-      for (const doc of entitiesResults) {
-        console.log(`- Document ${doc.id}`);
-        if (!doc.error) {
-          console.log("\tEntities:");
-          for (const entity of doc.entities) {
-            console.log(`\t- Entity ${entity.text} of type ${entity.category}`);
-          }
-        } else {
-          console.error("  Error:", doc.error);
-        }
-      }
-    }
-  }
-  
-  analyze_example(textAnalyticsClient);
